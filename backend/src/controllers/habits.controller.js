@@ -1,34 +1,67 @@
-
-const habitsService = require("../services/habits.service
-const req = require("express/lib/request");
 const habitService = require("../services/habits.service");
 
 const getAllHabits = async (req, res) => {
- const user = req.user;
- const { completed } = req.query;
+  const user = req.user;
+  const { completed } = req.query;
 
- const filter = {};
- if (completed !== undefined) {
+  const filter = {};
+  if (completed !== undefined) {
     filter.completed = completed === "true";
- }
- const Habit = await habitService.getAllHabits(user._id, filter);
- res.json({ Habit });
+  }
+  const Habit = await habitService.getAllHabits(user._id, filter);
+  res.json({ Habit });
 };
 
 const getHabitById = async (req, res) => {
-    const id = req.params.id;
-    const user = req.user;
-    const habit = await habitService.getHabitById(id, user._id);
+  const id = req.params.id;
+  const user = req.user;
+  const habit = await habitService.getHabitById(id, user._id);
 
-    if (habit) {
-        res.json(habit);
-    } else {
-       res.status(404).json({ message: `habit ${id} not found` }); 
-    }
+  if (habit) {
+    res.json(habit);
+  } else {
+    res.status(404).json({ message: `habit ${id} not found` });
+  }
 };
 
-module.exports = {
-    getAllHabits,
-    getHabitById
+const updateHabitById = async (req, res) => {
+  const user = req.user;
+  const id = req.params.id;
+  if (!req.body) {
+    return res.status(400).json({
+      message: `Body cannot be empty`,
+    });
+  }
 
-}
+  const newHabit = req.body;
+
+  const keys = Object.keys(newHabit);
+  const requireKeys = ["title", "goal", "frequency"];
+  const missingKeys = requireKeys.filter((key) => !keys.includes(key));
+
+  if (missingKeys.length > 0) {
+    return res.status(400).json({
+      message: `Please provide all information: ${missingKeys.join(",")}`,
+    });
+  }
+
+  const updateHabit = await habitsService.updateHabitById(
+    id,
+    newHabit,
+    user._id
+  );
+
+  if (updateHabit) {
+    res.json({
+      message: `Habit ${id} updated successfully`,
+      habit: updateHabit,
+    });
+  } else {
+    res.status(404).json({ message: `Habit ${id} not found` });
+  }
+};
+module.exports = {
+  getAllHabits,
+  getHabitById,
+  updateHabitById,
+};
