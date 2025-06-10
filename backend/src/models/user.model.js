@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema(
     phoneNumber: String,
     gender: {
       type: String,
-      enum:["male", "female"],
+      enum: ["male", "female"],
     },
   },
   { timestamps: true }
