@@ -1,7 +1,11 @@
 const express = require("express");
+const connectMongoDB = require("./db/mongo.db");
+
+const PORT = 3000;
 
 const app = express();
-const PORT = 3000;
+connectMongoDB();
+
 
 app.get("/health", (req, res) => {
   res.send(`Server is up and running`);
