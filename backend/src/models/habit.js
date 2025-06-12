@@ -11,5 +11,5 @@ const TodoSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const habits = mongoose.model("habits", TodoSchema);
-module.exports = habits;
+const Habits = mongoose.model("habits", TodoSchema);
+module.exports = Habits;
