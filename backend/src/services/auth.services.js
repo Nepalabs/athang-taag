@@ -1,7 +1,7 @@
 const { compareHash, createHash } = require("../utils/hash.util");
 const User = require("../models/user.model");
 const { createJWTToken } = require("../utils/jwt.util");
-const RevokedToken = require("../models/revoked-token.model");
+const RevokedToken = require("../models/revokedToken");
 
 const signIn = async (data) => {
   const { email, password } = data;
@@ -26,7 +26,7 @@ const signIn = async (data) => {
 
 const signUp = async (data) => {
   const { email } = data;
-  const user = await User.findeOne({ email: email });
+  const user = await User.findOne({ email: email });
 
   if (user) {
     return { userAlreadyExist: true };
