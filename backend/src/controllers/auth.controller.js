@@ -1,4 +1,4 @@
-const authService = require("../services/auth.service");
+const authService = require("../services/auth.services");
 
 const statusCodes = {
   success: 200,
@@ -21,8 +21,24 @@ const signIn = async (req, res) => {
   const missingKeys = requireKeys.filter((key) => !keys.includes(key));
 
   if (missingKeys.length > 0) {
-    return res.status().json({});
+    return res.status(statusCodes.badRequest).json({
+      message: `please provide information: ${missingKeys.join(",")}`,
+    });
   }
+
+  const result = await authService.signIn(req.body);
+  if (result.userNotFound) {
+    return res.status(404).json({
+      message: `User not found with the provided email ${req.body.email}`,
+    });
+  }
+  if (result.passwordMisMatch) {
+    return res
+      .status(400)
+      .json({ message: `The password you have provided is incorrect` });
+  }
+
+  res.json({ token: result.token });
 };
 
 const signUp = async (req, res) => {
