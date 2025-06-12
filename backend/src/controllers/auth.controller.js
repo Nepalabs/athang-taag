@@ -1,4 +1,4 @@
-const authService = require("../services/auth.services");
+const authService = require("../services/auth.service");
 
 const statusCodes = {
   success: 200,
@@ -44,20 +44,41 @@ const signUp = async (req, res) => {
     });
   }
 
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!#$%@*]).{8,}$/;
-
-  if (String(password).length < 8) {
+  if (password.length < 8) {
     return res.status(statusCodes.badRequest).json({
       message: `Password should be more than 8 characters`,
     });
   }
 
-  if (!passwordRegex.test(password)) {
-    return res.status(statusCodes.badRequest).json({
-      message: `Password must include at least one uppercase, one lowercase letter and one special character`,
-    });
+  const errors = [];
+
+  if (password.length < 8) {
+    errors.push("Password should be at least 8 characters long.");
   }
 
+  if (!/[A-Z]/.test(password)) {
+    errors.push("Password must include at least one uppercase letter.");
+  }
+
+  if (!/[a-z]/.test(password)) {
+    errors.push("Password must include at least one lowercase letter.");
+  }
+
+  if (!/\d/.test(password)) {
+    errors.push("Password must include at least one digit.");
+  }
+
+  if (!/[!#$%@*]/.test(password)) {
+    errors.push(
+      "Password must include at least one special character (!, #, $, %, @, *)."
+    );
+  }
+
+  if (errors.length > 0) {
+    return res.status(statusCodes.badRequest).json({
+      message: errors.join(" "), // or send as an array: errors
+    });
+  }
   const result = await authService.signUp(req.body);
 
   if (result.userAlreadyExist) {
