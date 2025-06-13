@@ -69,12 +69,6 @@ const signUp = async (req, res) => {
     });
   }
 
-  if (password.length < 8) {
-    return res.status(400).json({
-      message: `Password should be more than 8 characters`,
-    });
-  }
-
   if (!passwordRegex.test(password)) {
     return res.status(400).json({
       message: `Password must include at least one uppercase letter, one lowercase letter and one special character`,

@@ -1,4 +1,4 @@
-const RevokedToken = require("../models/revokedToken");
+const RevokedToken = require("../models/revokedToken.model");
 const { verifyJWTToken } = require("../utils/jwt.util");
 
 const verifyAuth = async (req, res, next) => {

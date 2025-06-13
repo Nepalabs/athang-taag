@@ -8,5 +8,5 @@ const RevokedTokenSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const RevokedToken = mongoose.model("revoked-tokens", RevokedTokenSchema);
+const RevokedToken = mongoose.model("revoked-token", RevokedTokenSchema);
 module.exports = RevokedToken;
