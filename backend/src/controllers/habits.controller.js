@@ -1,4 +1,4 @@
-const habitService = require("../services/habits.service");
+const habitsService = require("../services/habits.service");
 
 const getAllHabits = async (req, res) => {
   const user = req.user;
@@ -8,17 +8,17 @@ const getAllHabits = async (req, res) => {
   if (completed !== undefined) {
     filter.completed = completed === "true";
   }
-  const Habit = await habitService.getAllHabits(user._id, filter);
-  res.json({ Habit });
+  const habits = await habitsService.getAllHabits(user._id, filter);
+  res.status(200).json({ habits });
 };
 
 const getHabitById = async (req, res) => {
   const id = req.params.id;
   const user = req.user;
-  const habit = await habitService.getHabitById(id, user._id);
+  const habit = await habitsService.getHabitById(id, user._id);
 
   if (habit) {
-    res.json(habit);
+    res.status(200).json(habit);
   } else {
     res.status(404).json({ message: `habit ${id} not found` });
   }
@@ -27,13 +27,13 @@ const getHabitById = async (req, res) => {
 const createHabit = async (req, res) => {
   const user = req.user;
   if (!req.body) {
-    return res.status(400).json({
+    return res.status(404).json({
       message: `Body cannot be empty`,
     });
   }
   const newHabit = req.body;
   const keys = Object.keys(newHabit);
-  const requireKeys = ["title", "description", "note", "completed"];
+  const requireKeys = ["title", "goal", "frequency", "progress"];
 
   const missingKeys = requireKeys.filter((key) => !keys.includes(key));
 
@@ -42,16 +42,15 @@ const createHabit = async (req, res) => {
       message: `Please provide all information: ${missingKeys.join(",")}`,
     });
   }
-  const createHabit = await habitService.createHabit(newHabit,user._id);
-  res. status(201).json({ message: "Habit created", Habit: createHabit });
+  const createHabit = await habitsService.createHabit(newHabit, user._id);
+  res.status(201).json({ message: "Habit created", Habit: createHabit });
 };
-
 
 const updateHabitById = async (req, res) => {
   const user = req.user;
   const id = req.params.id;
   if (!req.body) {
-    return res.status(400).json({
+    return res.status(404).json({
       message: `Body cannot be empty`,
     });
   }
@@ -59,7 +58,7 @@ const updateHabitById = async (req, res) => {
   const newHabit = req.body;
 
   const keys = Object.keys(newHabit);
-  const requireKeys = ["title", "goal", "frequency"];
+  const requireKeys = ["title", "goal", "frequency", "completed"];
   const missingKeys = requireKeys.filter((key) => !keys.includes(key));
 
   if (missingKeys.length > 0) {
@@ -87,12 +86,12 @@ const updateHabitById = async (req, res) => {
 const deleteHabitById = async (req, res) => {
   const id = req.params.id;
   const user = req.user;
-  const isDeleted = await habitService.deleteHabitById(id, user._id);
+  const isDeleted = await habitsService.deleteHabitById(id, user._id);
 
   if (isDeleted) {
     res.json({ message: `Habit ${id} deleted successfully` });
   } else {
-    res.status(404).json({ message: `Habitn with ${id} not found` });
+    res.status(404).json({ message: `Habit with ${id} not found` });
   }
 };
 module.exports = {
@@ -100,5 +99,5 @@ module.exports = {
   getHabitById,
   createHabit,
   updateHabitById,
-  deleteHabitById
+  deleteHabitById,
 };

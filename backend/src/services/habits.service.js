@@ -1,37 +1,36 @@
-const Habits = require("../models/habit");
+const Habit = require("../models/habit.model");
 
-
-const getAllHabits =  async (loggedInUserId, filter = {}) => {
-  const habit = await Habits.find ({ userId: loggedInUserId, ...filter });
-  return habit;
+const getAllHabits = async (loggedInUserId, filter = {}) => {
+  const habits = await Habit.find({ userId: loggedInUserId, ...filter });
+  return habits;
 };
 
 const getHabitById = async (id, loggedInUserId) => {
-  const habit = await Habits.findOne({ _id: id, userId: loggedInUserId });
+  const habit = await Habit.findOne({ _id: id, userId: loggedInUserId });
   return habit;
 };
 
 const createHabit = async (newHabit, loggedInUserId) => {
   newHabit.userId = loggedInUserId;
-  const savedHabit = await Habits.create(newHabit);
+  const savedHabit = await Habit.create(newHabit);
   return savedHabit;
 };
 
 const updateHabitById = async (id, newHabit, loggedInUserId) => {
-  const update = await Habits.updateOne(
+  const update = await Habit.updateOne(
     { _id: id, userId: loggedInUserId },
-    { $set: newTodo }
+    { $set: newHabit }
   );
   if (update.matchedCount > 0) {
-  const updateHabit = await Habits.findOne({ _id: id});
-  return updateHabit;
+    const updateHabit = await Habit.findOne({ _id: id });
+    return updateHabit;
   } else {
     return;
   }
 };
 
 const deleteHabitById = async (id, loggedInUserId) => {
-  const deleted = await Habits.deleteOne({ _id: id, userId: loggedInUserId});
+  const deleted = await Habit.deleteOne({ _id: id, userId: loggedInUserId });
 
   if (deleted.deletedCount > 0) {
     return true;
@@ -45,6 +44,5 @@ module.exports = {
   getHabitById,
   createHabit,
   updateHabitById,
-  deleteHabitById
+  deleteHabitById,
 };
-
