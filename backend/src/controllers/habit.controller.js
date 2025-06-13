@@ -1,4 +1,4 @@
-const habitsService = require("../services/habits.service");
+const habitsService = require("../services/habit.service");
 
 const getAllHabits = async (req, res) => {
   const user = req.user;
@@ -20,7 +20,7 @@ const getHabitById = async (req, res) => {
   if (habit) {
     res.status(200).json(habit);
   } else {
-    res.status(404).json({ message: `habit ${id} not found` });
+    res.status(404).json({ message: `habit with Id ${id} not found` });
   }
 };
 
@@ -58,7 +58,7 @@ const updateHabitById = async (req, res) => {
   const newHabit = req.body;
 
   const keys = Object.keys(newHabit);
-  const requireKeys = ["title", "goal", "frequency", "completed"];
+  const requireKeys = ["title", "goal", "frequency", "progress"];
   const missingKeys = requireKeys.filter((key) => !keys.includes(key));
 
   if (missingKeys.length > 0) {
