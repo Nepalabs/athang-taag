@@ -27,6 +27,7 @@ const signIn = async (req, res) => {
   }
 
   const result = await authService.signIn(req.body);
+
   if (result.userNotFound) {
     return res.status(404).json({
       message: `User not found with the provided email ${req.body.email}`,
@@ -60,41 +61,26 @@ const signUp = async (req, res) => {
     });
   }
 
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!#$%@*]).{8,}$/;
+
   if (password.length < 8) {
     return res.status(statusCodes.badRequest).json({
       message: `Password should be more than 8 characters`,
     });
   }
 
-  const errors = [];
-
   if (password.length < 8) {
-    errors.push("Password should be at least 8 characters long.");
-  }
-
-  if (!/[A-Z]/.test(password)) {
-    errors.push("Password must include at least one uppercase letter.");
-  }
-
-  if (!/[a-z]/.test(password)) {
-    errors.push("Password must include at least one lowercase letter.");
-  }
-
-  if (!/\d/.test(password)) {
-    errors.push("Password must include at least one digit.");
-  }
-
-  if (!/[!#$%@*]/.test(password)) {
-    errors.push(
-      "Password must include at least one special character (!, #, $, %, @, *)."
-    );
-  }
-
-  if (errors.length > 0) {
-    return res.status(statusCodes.badRequest).json({
-      message: errors.join(" "), // or send as an array: errors
+    return res.status(400).json({
+      message: `Password should be more than 8 characters`,
     });
   }
+
+  if (!passwordRegex.test(password)) {
+    return res.status(400).json({
+      message: `Password must include at least one uppercase letter, one lowercase letter and one special character`,
+    });
+  }
+
   const result = await authService.signUp(req.body);
 
   if (result.userAlreadyExist) {
@@ -110,7 +96,7 @@ const signUp = async (req, res) => {
 
 const signOut = async (req, res) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader.split("")[1];
+  const token = authHeader.split(" ")[1];
   await authService.signOut(token);
 
   res.status(statusCodes.noContent).json({ message: `Signout successfully` });
