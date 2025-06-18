@@ -1,5 +1,13 @@
 import axios from "../config/axiosConfig";
 
+const registerUser = async (formData) => {
+  return axios.post("/auth/signup", formData);
+}
+
+const loginUser = async (formData) => {
+  return axios.post("/auth/signin", formData);
+}
+
 const getAllHabits = () => {
   return axios.get("/habits/");
 };
@@ -12,4 +20,4 @@ const deleteHabit = (id) => {
 const updateHabit = (id, data) => {
   return axios.put(`/habits/${id}`, data);
 };
-export { getAllHabits, createHabit, deleteHabit, updateHabit };
+export { registerUser, loginUser, getAllHabits, createHabit, deleteHabit, updateHabit };
