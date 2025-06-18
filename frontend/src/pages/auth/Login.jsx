@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import axios from "axios";
+import { loginUser } from "../../api/api";
 
 const initialData = {
   email: "",
@@ -22,10 +22,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      const response = await axios.post(
-        "http://localhost:3000/auth/signin",
-        formData
-      );
+      const response = await loginUser(formData);
 
       setError("");
       setFormData({ ...initialData });
