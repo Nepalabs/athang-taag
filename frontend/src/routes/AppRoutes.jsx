@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Loading from "../components/Loading";
-import Home from "../pages/index";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import Home from "../pages";
 
 const PrivateRoute = ({ children }) => {
   const { isloggedIn, isLoading } = useAuth();
@@ -22,7 +22,6 @@ const PrivateRoute = ({ children }) => {
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/login" Component={Login} />
       <Route
         path="/"
         element={
@@ -31,7 +30,8 @@ const AppRoutes = () => {
           </PrivateRoute>
         }
       />
-      <Route path="register" Component={Register} />
+      <Route path="/login" Component={Login} />
+      <Route path="/register" Component={Register} />
     </Routes>
   );
 };
