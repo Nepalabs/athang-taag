@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { deleteTodo, getAllTodos } from "../api/api";
+import { deleteHabit, getAllHabits, } from "../api/api";
 
 const initialData = {
     title: "",
@@ -11,19 +11,19 @@ const initialData = {
 
 const Home = () => {
     const [form, setForm] = useState({ ...initialData });
-    const [todos, setTodos] = useState([]);
+    const [habits, setHabits] = useState([]);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const { user, logout } = useAuth();
 
     const isUpdate = !!form._id;
 
     useEffect(() => {
-        fetchTodos();
+        fetchHabits();
     }, []);
 
-    const fetchTodos = async () => {
-        const response = await getAllTodos();
-        setTodos(response.data?.todos || []);
+    const fetchHabits = async () => {
+        const response = await getAllHabits();
+        setHabits(response.data?.habits || []);
     };
 
     const handleLogout = () => {
@@ -39,9 +39,9 @@ const Home = () => {
 
     const handleDelete = async (id) => {
         try {
-            const response = await deleteTodo(id);
+            const response = await deleteHabit(id);
             if (response && response.data) {
-                await fetchTodos();
+                await fetchHabits();
             }
         } catch (error) {
             console.error(error);
@@ -58,12 +58,12 @@ const Home = () => {
 
             let response;
             if (isUpdate) {
-                response = await updateTodo(form._id, form);
+                response = await updateHabit(form._id, form);
             } else {
-                response = await createTodo(form);
+                response = await createHabit(form);
             }
             if (response && response.data) {
-                await fetchTodos();
+                await fetchHabits();
                 handleDialog(false);
             }
         } catch (error) {
@@ -71,67 +71,66 @@ const Home = () => {
         }
     };
 
-    const handleUpdate = (todo) => {
-        const { userId, _v, ...date } = todo;
+    const handleUpdate = (habit) => {
+        const { userId, _v, ...date } = habit;
         handleDialog(true);
         setForm(data);
     };
 
     return (
         <div>
-            <nav className="navbar">
-                <div className="logo">LWP todo</div>
-                <div className="nav-right">
-                    <span className="user-info">{user?.name || "user"}</span>
-                    <button className="logout-button" onClick={handleLogout}>
+            <nav>
+                <div> Taag habit</div>
+                <div>
+                    <span>{user?.name || "user"}</span>
+                    <button onClick={handleLogout}>
                         Logout
                     </button>
                 </div>
             </nav>
 
-            <div className="todo-container">
-                <h1>Todo List</h1>
-                <button className="add-button" onClick={handleDialog(true)}>
+            <div>
+                <h1>Habit List</h1>
+                <button onClick={handleDialog(true)}>
                     Add
                 </button>
-                <ul className="todo-list">
-                    {todos.length > 0 ? (
-                        todos.map((todo) => (
-                            <li key={todo._id} className="todo-item">
-                                <div>
-                                    <p className="todo-title">{todo.title}</p>
-                                    <p>{todo.description}</p>
-                                    <small>{todo.note}</small>
-                                    {todo.completed && <p className="completed">Completed</p>}
-                                </div>
-                                <div style={{ display: "flex", gap: "10px" }}>
-                                    <button
-                                        className="update-button"
-                                        onClick={() => handleUpdate(todo)}
-                                    >
-                                        Update
-                                    </button>
-                                    <button
-                                        className="delete-button"
-                                        onClick={() => handleDelete(todo._id)}
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
-                            </li>
-                        ))
-                    ) : (
-                        <div style={{ fontSize: "1.8em" }}>
-                            No todos. Start creating Todo
-                        </div>
-                    )}
+                <ul>{habits.length > 0 ? (
+                    habits.map((habit) => (
+                        <li key={habit._id}>
+                            <div>
+                                <p>{habit.title}</p>
+                                <p>{habit.description}</p>
+                                <small>{habit.note}</small>
+                                {habit.completed && <p></p>}
+                            </div>
+                            <div style={{ display: "flex", gap: "10px" }}>
+                                <button
+
+                                    onClick={() => handleUpdate(habit)}
+                                >
+                                    Update
+                                </button>
+                                <button
+
+                                    onClick={() => handleDelete(habit._id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </li>
+                    ))
+                ) : (
+                    <div style={{ fontSize: "1.8em" }}>
+                        No habits. Start creating Habit
+                    </div>
+                )}
                 </ul>
 
                 {isDialogOpen && (
-                    <div className="dialog-overlay">
-                        <div className="dialog">
-                            <h2>{isUpdate ? "Update Todo" : "Add todo"}</h2>
-                            <form className="todo-from" onSubmit={handleSubmit}>
+                    <div>
+                        <div>
+                            <h2>{isUpdate ? "Update Habit" : "Add habit"}</h2>
+                            <form onSubmit={handleSubmit}>
                                 <input
                                     type="text"
                                     name="title"
