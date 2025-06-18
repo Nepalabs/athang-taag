@@ -1,5 +1,5 @@
 import axios from "axios";
-import { usestate } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const initialData = {
@@ -8,13 +8,14 @@ const initialData = {
   password: "",
   confirmPassword: "",
   phoneNumber: "",
+  gender: "",
 };
 
 const Register = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = usestate({ ...initialData });
+  const [formData, setFormData] = useState({ ...initialData });
 
-  const [error, setError] = usestate("");
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,14 +24,14 @@ const Register = () => {
     try {
       e.preventDefault();
       if (formData.password !== formData.confirmPassword) {
-        setError("Password and confrim password does not matched");
-        return;
+        setError("Password and confirm password does not matched");
       }
-      const response = await axios.post("htto://localhost:3000/auth/signup", {
+      const response = await axios.post("http://localhost:3000/auth/signup", {
         name: formData.name,
         email: formData.email,
         password: formData.password,
         phoneNumber: formData.phoneNumber,
+        gender: formData.gender,
       });
       console.log(response.data);
       setError("");
@@ -59,7 +60,7 @@ const Register = () => {
         <label>
           Email
           <input
-            type="text"
+            type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
@@ -69,7 +70,7 @@ const Register = () => {
         <label>
           Password
           <input
-            type="text"
+            type="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
@@ -79,8 +80,8 @@ const Register = () => {
         <label>
           ConfirmPassword
           <input
-            type="text"
-            name="confirmpassword"
+            type="password"
+            name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
             required
@@ -89,12 +90,25 @@ const Register = () => {
         <label>
           PhoneNumber
           <input
-            type="text"
+            type="tel"
             name="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleChange}
             required
           />
+        </label>
+        <label>
+          Gender
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            required
+          >
+            <option value="">-- Select Gender --</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
         </label>
         {error && <p className="register-error">{error}</p>}
         <button type="submit">Register</button>
