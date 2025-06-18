@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   const getLoggedInUser = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("lwp-token");
+      const token = localStorage.getItem("taag-token");
       if (!token) {
         setLoggedIn(false);
         setLoading(false);
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const response = await axios.get(
-        "http://localhost:3000/auth/loggedinuser",
+        "http://localhost:3000/auth/loggedin-user",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const token = localStorage.getItem("pw-token");
+      const token = localStorage.getItem("taag-token");
       if (!token) {
         setLoggedIn(false);
         setLoading(false);
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
       });
       setLoggedIn(false);
       setUser({});
-      localStorage.setItem("pw-token", "");
+      localStorage.setItem("taag-token", "");
     } catch (error) {
       console.error(error);
       setLoggedIn(false);
