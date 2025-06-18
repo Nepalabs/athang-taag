@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../../api/api";
 
 const initialData = {
   name: "",
@@ -25,8 +25,15 @@ const Register = () => {
       e.preventDefault();
       if (formData.password !== formData.confirmPassword) {
         setError("Password and confirm password does not matched");
+        return;
       }
-      const response = await axios.post("http://localhost:3000/auth/signup", {
+
+      if (!formData.gender) {
+        setError("Please select a gender");
+        return;
+      }
+
+      const response = await registerUser({
         name: formData.name,
         email: formData.email,
         password: formData.password,
