@@ -1,17 +1,15 @@
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 
-
+import { useAuth } from "../context/AuthContext"
 const Navbar = () => {
   const navigate = useNavigate();
-
-  const { loggedIn, toggleAuth, userName } = useAuth();
+  const { isLoggedIn, user, logout } = useAuth();
 
   const handleAuth = () => {
-    if (!loggedIn) {
+    if (!isLoggedIn) {
       navigate("/login");
     } else {
-      toggleAuth();
+      logout();
       navigate("/");
     }
   };
@@ -32,22 +30,21 @@ const Navbar = () => {
           fontSize: "1.2rem",
           textDecoration: "none",
         }}
-        to={"/"}
+        to="/"
       >
         Home
       </Link>
-      <div style={{ display: "flex", gap: "1.5rem" }}>
-        <Link to={"/habits"}>Habits</Link>
-        <Link to={"/about"}>About</Link>
-        <Link to={"/profile"}>Profile</Link>
-        {loggedIn && <Link to={"/profile"}>profile</Link>}
-        {!loggedIn ? (
-          <>
-            <button onClick={handleAuth}>Login</button>
-          </>
+
+      <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+        <Link to="/habits">Habits</Link>
+        <Link to="/about">About</Link>
+        <Link to="/profile">Profile</Link>
+
+        {!isLoggedIn ? (
+          <button onClick={handleAuth}>Login</button>
         ) : (
           <>
-            {userName}
+            <span>{user?.name}</span>
             <button onClick={handleAuth}>Logout</button>
           </>
         )}

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
+import "./index.css"
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -35,22 +36,24 @@ const Profile = () => {
   return (
     <div>
       <Navbar />
-      <h1>Your Profile</h1>
+      <div className={styles.profileContainer}>
+        <h1 className={styles.heading}>Your Profile</h1>
 
-      <div>
-        <strong>Name</strong> {user.name}
-      </div>
+        <div className={styles.userDetail}>
+          <span className={styles.label}>Name:</span> {user.name}
+        </div>
 
-      <div>
-        <strong>Email</strong> {user.email}
-      </div>
+        <div className={styles.userDetail}>
+          <span className={styles.label}>Email:</span> {user.email}
+        </div>
 
-      <div>
-        <strong>Phone Number: </strong> {user.tel}
-      </div>
+        <div className={styles.userDetail}>
+          <span className={styles.label}>Phone Number:</span> {user.tel}
+        </div>
 
-      <div>
-        <strong>Gender</strong> {user.gender}
+        <div className={styles.userDetail}>
+          <span className={styles.label}>Gender:</span> {user.gender}
+        </div>
       </div>
     </div>
   );
