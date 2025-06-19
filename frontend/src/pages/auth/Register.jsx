@@ -84,6 +84,7 @@ const Register = () => {
             required
           />
         </label>
+
         <label>
           ConfirmPassword
           <input
@@ -104,19 +105,32 @@ const Register = () => {
             required
           />
         </label>
-        <label>
-          Gender
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            required
-          >
-            <option value="">-- Select Gender --</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-        </label>
+
+        <div className="gender">
+          <label> Gender </label>
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="male"
+              checked={formData.gender === "male"}
+              onChange={handleChange}
+              required
+            />
+            Male
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="female"
+              checked={formData.gender === "female"}
+              onChange={handleChange}
+              required
+            />
+            Female
+          </label>
+        </div>
         {error && <p className="register-error">{error}</p>}
         <button type="submit">Register</button>
 
