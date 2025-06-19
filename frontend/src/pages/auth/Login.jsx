@@ -29,7 +29,6 @@ const Login = () => {
 
       localStorage.setItem("taag-token", response.data.token);
       await getLoggedInUser();
-      console.log("here I am");
       navigate("/");
     } catch (error) {
       console.error(error);
@@ -57,7 +56,7 @@ const Login = () => {
           name="password"
           value={formData.password}
           onChange={handleChange}
-          require
+          required
         />
 
         {error && <p className="register-error">{error}</p>}

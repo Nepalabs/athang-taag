@@ -9,8 +9,9 @@ import {
 
 const initialData = {
   title: "",
-  description: "",
-  note: "",
+  goal: "",
+  frequency: "daily",
+  progress: [],
   completed: false,
 };
 
@@ -18,6 +19,7 @@ const Home = () => {
   const [form, setForm] = useState({ ...initialData });
   const [habits, setHabits] = useState([]);
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const { user, logout } = useAuth();
 
   const isUpdate = !!form._id;
@@ -52,14 +54,42 @@ const Home = () => {
       console.error(error);
     }
   };
+
   const handleChange = (e) => {
     const { name, value, checked } = e.target;
-    setForm({ ...form, [name]: name === "completed" ? checked : value });
+
+    if (name === "completed") {
+      const currentDate = getDate();
+      let updatedProgress = [...form.progress];
+
+      const index = updatedProgress.findIndex(
+        (entry) => entry.date === currentDate
+      );
+
+      if (index >= 0) {
+        updatedProgress[index].status = checked;
+      } else {
+        updatedProgress.push({ date: currentDate, status: checked });
+      }
+      setForm({ ...form, completed: checked, progress: updatedProgress });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
+
+  const getDate = () => new Date().toLocaleString();
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+
+      form.title = form.title.trim();
+      form.goal = form.goal.trim();
+
+      if (!isUpdate) {
+        const currentDate = getDate();
+        form.progress = [{ date: currentDate, status: form.completed }];
+      }
 
       let response;
       if (isUpdate) {
@@ -67,6 +97,7 @@ const Home = () => {
       } else {
         response = await createHabit(form);
       }
+
       if (response && response.data) {
         await fetchHabits();
         handleDialog(false);
@@ -77,9 +108,30 @@ const Home = () => {
   };
 
   const handleUpdate = (habit) => {
-    const { userId, _v, ...data } = habit;
+    const { userId, __v, ...data } = habit;
     handleDialog(true);
-    setForm(data);
+    setForm({
+      title: data.title || "",
+      goal: data.goal || "",
+      frequency: data.frequency || "daily",
+      progress: data.progress || [],
+      completed: data.completed ?? false,
+      _id: data._id,
+    });
+  };
+
+  const handleNext = () => {
+    if (habits.length > 0) {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % habits.length);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (habits.length > 0) {
+      setCurrentIndex(
+        (prevIndex) => (prevIndex - 1 + habits.length) % habits.length
+      );
+    }
   };
 
   return (
@@ -99,44 +151,75 @@ const Home = () => {
         <button className="add-button" onClick={() => handleDialog(true)}>
           Add
         </button>
-        <ul className="habit-list">
+
+        <div className="habit-slider">
           {habits.length > 0 ? (
-            habits.map((habit) => (
-              <li key={habit._id} className="habit-item">
+            <>
+              <div className="habit-card">
+                <p className="habit-title">
+                  <strong>Habit:</strong> {habits[currentIndex].title}
+                </p>
+                <p>
+                  <strong>Goal:</strong> {habits[currentIndex].goal}
+                </p>
+                <p>
+                  <strong>Frequency:</strong> {habits[currentIndex].frequency}
+                </p>
+
                 <div>
-                  <p className="habit-title">{habit.title}</p>
-                  <p>{habit.description}</p>
-                  <small>{habit.note}</small>
-                  {habit.completed && <p className="completed">Completed</p>}
+                  <strong>Progress:</strong>
+                  {habits[currentIndex].progress.length > 0 ? (
+                    <ul>
+                      {habits[currentIndex].progress.map((entry, index) => (
+                        <li key={index}>
+                          {new Date(entry.date).toLocaleString()}
+                          {entry.status ? "✅" : "❌"}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div>No progress yet</div>
+                  )}
                 </div>
-                <div style={{ display: "flex", gap: "10px" }}>
+
+                {habits[currentIndex].completed && (
+                  <p className="completed">Completed</p>
+                )}
+                <div className="habit-actions">
                   <button
                     className="update-button"
-                    onClick={() => handleUpdate(habit)}
+                    onClick={() => handleUpdate(habits[currentIndex])}
                   >
                     Update
                   </button>
                   <button
                     className="delete-button"
-                    onClick={() => handleDelete(habit._id)}
+                    onClick={() => handleDelete(habits[currentIndex]._id)}
                   >
                     Delete
                   </button>
                 </div>
-              </li>
-            ))
+              </div>
+              <div className="slider-controls">
+                <button onClick={handlePrevious}>⟨ Prev</button>
+                <span>
+                  {currentIndex + 1} / {habits.length}
+                </span>
+                <button onClick={handleNext}>Next ⟩</button>
+              </div>
+            </>
           ) : (
             <div style={{ fontSize: "1.8em" }}>
               No Habits. Start creating Habit
             </div>
           )}
-        </ul>
+        </div>
 
         {isDialogOpen && (
           <div className="dialog-overlay">
             <div className="dialog">
               <h2>{isUpdate ? "Update Habit" : "Add Habit"}</h2>
-              <form className="habit-from" onSubmit={handleSubmit}>
+              <form className="habit-form" onSubmit={handleSubmit}>
                 <input
                   type="text"
                   name="title"
@@ -145,19 +228,24 @@ const Home = () => {
                   onChange={handleChange}
                   required
                 />
-                <textarea
-                  name="description"
-                  placeholder="Description"
-                  value={form.description}
+                <input
+                  type="text"
+                  name="goal"
+                  placeholder="goal"
+                  value={form.goal}
                   onChange={handleChange}
                   required
                 />
-                <textarea
-                  name="note"
-                  placeholder="Note"
-                  value={form.note}
+
+                <label> Frequency: </label>
+                <select
+                  name="frequency"
+                  value={form.frequency}
                   onChange={handleChange}
-                />
+                >
+                  <option value="daily"> Daily </option>
+                  <option value="weekly"> Weekly </option>
+                </select>
 
                 {isUpdate && (
                   <label className="checkbox-label">
