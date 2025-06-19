@@ -6,6 +6,7 @@ import {
   updateHabit,
   deleteHabit,
 } from "../api/api";
+import Navbar from "../components/Navbar";
 
 const initialData = {
   title: "",
@@ -136,15 +137,8 @@ const Home = () => {
 
   return (
     <div>
-      <nav className="navbar">
-        <div className="logo">My Habits</div>
-        <div className="nav-right">
-          <span className="user-info">{user?.name || "user"}</span>
-          <button className="logout-button" onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
-      </nav>
+      <Navbar />
+
 
       <div className="habit-container">
         <h1>Habit List</h1>
@@ -269,7 +263,7 @@ const Home = () => {
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 

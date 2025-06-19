@@ -1,58 +1,33 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+
 import Navbar from "../../components/Navbar";
+import { useAuth } from "../../context/AuthContext";
 import "./index.css"
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
+  const { user } = useAuth();
 
-        const response = await axios.get("/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setUser(response.data);
-      } catch (err) {
-        setError("Failed to load profile");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProfile();
-  }, []);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <div>
       <Navbar />
-      <div className={styles.profileContainer}>
-        <h1 className={styles.heading}>Your Profile</h1>
+      <div className="profile-container">
+        <h1 className="profile-heading">Your Profile</h1>
 
-        <div className={styles.userDetail}>
-          <span className={styles.label}>Name:</span> {user.name}
+        <div className="profile-detail">
+          <span className="profile-label">Name:</span> {user.name}
         </div>
 
-        <div className={styles.userDetail}>
-          <span className={styles.label}>Email:</span> {user.email}
+        <div className="profile-detail">
+          <span className="profile-label">Email:</span> {user.email}
         </div>
 
-        <div className={styles.userDetail}>
-          <span className={styles.label}>Phone Number:</span> {user.tel}
+        <div className="profile-detail">
+          <span className="profile-label">Phone Number:</span> {user.phoneNumber}
         </div>
 
-        <div className={styles.userDetail}>
-          <span className={styles.label}>Gender:</span> {user.gender}
+        <div className="profile-detail">
+          <span className="profile-label">Gender:</span> {user.gender}
         </div>
       </div>
     </div>
