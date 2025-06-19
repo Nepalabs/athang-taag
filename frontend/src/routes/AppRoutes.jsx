@@ -4,6 +4,7 @@ import Loading from "../components/Loading";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Home from "../pages";
+import Profile from "../pages/profiles";
 
 const PrivateRoute = ({ children }) => {
   const { isloggedIn, isLoading } = useAuth();
@@ -32,6 +33,7 @@ const AppRoutes = () => {
       />
       <Route path="/login" Component={Login} />
       <Route path="/register" Component={Register} />
+      <Route path="/profile" Component={Profile} />
     </Routes>
   );
 };
