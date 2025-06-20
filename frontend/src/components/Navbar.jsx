@@ -1,8 +1,14 @@
-import { Link, Navigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+
 const Navbar = () => {
-  const { isloggedIn, user, logout } = useAuth();
+  const { isloggedIn, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <div
@@ -31,14 +37,8 @@ const Navbar = () => {
         {isloggedIn && <Link to="/profile"> Profile </Link>}
 
         <div className="nav-right">
-          <span className="user-info">{user?.name || " "}</span>
-          {/* <button className="logout-button" onClick={logout}>
-            {isloggedIn ? `Logout` : `Login`}
-            <Link to="/login">Login</Link> */}
-          {/* </button> */}
-
           {isloggedIn ? (
-            <button onClick={logout}> Logout </button>
+            <button onClick={handleLogout}> Logout </button>
           ) : (
             <Link to="/login"> Login </Link>
           )}

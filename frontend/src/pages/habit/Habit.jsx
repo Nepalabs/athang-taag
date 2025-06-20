@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
 import {
   getAllHabits,
   createHabit,
@@ -21,7 +20,8 @@ const Habit = () => {
   const [habits, setHabits] = useState([]);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { user, logout } = useAuth();
+  const [searchHabit, setSearchHabit] = useState("");
+  const [searchMessage, setSearchMessage] = useState("");
 
   const isUpdate = !!form._id;
 
@@ -131,13 +131,54 @@ const Habit = () => {
     }
   };
 
+  const handleSearch = () => {
+    const search = searchHabit.trim().toLowerCase();
+    if (!search) {
+      setSearchMessage("");
+      return;
+    }
+
+    const foundIndex = habits.findIndex(
+      (habit) => habit.title.toLowerCase() === search
+    );
+
+    if (foundIndex !== -1) {
+      setCurrentIndex(foundIndex);
+      setSearchMessage("");
+    } else {
+      setSearchMessage(
+        `Habit "${searchHabit}" does not exist. Please add Habit. `
+      );
+    }
+  };
+
   return (
     <div>
       <Navbar />
 
       <div className="habit-container">
         <h1>Habit List</h1>
-        <button className="add-button" onClick={() => handleDialog(true)}>
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search habit by title"
+            value={searchHabit}
+            onChange={(e) => {
+              setSearchHabit(e.target.value);
+            }}
+          />
+          <button onClick={handleSearch}> Search </button>
+          {searchMessage && <p className="search-message">{searchMessage}</p>}
+        </div>
+
+        <button
+          className="add-button"
+          onClick={() => {
+            setSearchHabit("");
+            setSearchMessage("");
+            handleDialog(true);
+          }}
+        >
           Add
         </button>
 
