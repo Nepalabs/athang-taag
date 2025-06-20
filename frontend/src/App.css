@@ -549,3 +549,53 @@ h1 {
   gap: 15px;
   align-items: center;
 }
+
+/* home css */
+
+.home-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  background-color: #f4f6f8;
+  color: #333;
+}
+
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.main-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2e7d32;
+  margin-bottom: 30px;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 1.6rem;
+  color: #1b5e20;
+  margin-bottom: 10px;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.conclusion {
+  font-size: 1.1rem;
+  padding-top: 20px;
+  border-top: 1px solid #ccc;
+  color: #444;
+}

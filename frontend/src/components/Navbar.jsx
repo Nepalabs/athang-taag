@@ -1,16 +1,19 @@
-import { useNavigate, Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext";
 const Navbar = () => {
-  const navigate = useNavigate();
-  const { isLoggedIn, user, logout } = useAuth();
+  const { isloggedIn, user, toggleAuth } = useAuth();
+
+  // const handleLogout = () => {
+  //   logout();
+  // };
 
   const handleAuth = () => {
-    if (!isLoggedIn) {
-      navigate("/login");
+    if (isloggedIn) {
+      toggleAuth();
+      Navigate("/");
     } else {
-      logout();
-      navigate("/");
+      Navigate("/login");
     }
   };
 
@@ -38,16 +41,14 @@ const Navbar = () => {
       <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
         <Link to="/habits">Habits</Link>
         <Link to="/about">About</Link>
-        <Link to="/profile">Profile</Link>
+        {isloggedIn && <Link to="/profile"> Profile </Link>}
 
-        {!isLoggedIn ? (
-          <button onClick={handleAuth}>Login</button>
-        ) : (
-          <>
-            <span>{user?.name}</span>
-            <button onClick={handleAuth}>Logout</button>
-          </>
-        )}
+        <div className="nav-right">
+          <span className="user-info">{user?.name || " "}</span>
+          <button className="logout-button" onClick={handleAuth}>
+            {isloggedIn ? `Logout` : `Login`}
+          </button>
+        </div>
       </div>
     </div>
   );

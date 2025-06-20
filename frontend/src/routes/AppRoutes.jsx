@@ -6,6 +6,7 @@ import Register from "../pages/auth/Register";
 import Home from "../pages";
 import Profile from "../pages/profiles";
 import About from "../pages/about";
+import Habit from "../pages/habit/Habit";
 
 const PrivateRoute = ({ children }) => {
   const { isloggedIn, isLoading } = useAuth();
@@ -24,11 +25,12 @@ const PrivateRoute = ({ children }) => {
 const AppRoutes = () => {
   return (
     <Routes>
+      <Route path="/" Component={Home} />
       <Route
-        path="/"
+        path="/habits"
         element={
           <PrivateRoute>
-            <Home />
+            <Habit />
           </PrivateRoute>
         }
       />

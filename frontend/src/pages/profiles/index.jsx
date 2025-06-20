@@ -1,12 +1,9 @@
-
 import Navbar from "../../components/Navbar";
 import { useAuth } from "../../context/AuthContext";
-import "./index.css"
+import "./index.css";
 
 const Profile = () => {
-
   const { user } = useAuth();
-
 
   return (
     <div>
@@ -23,7 +20,8 @@ const Profile = () => {
         </div>
 
         <div className="profile-detail">
-          <span className="profile-label">Phone Number:</span> {user.phoneNumber}
+          <span className="profile-label">Phone Number:</span>{" "}
+          {user.phoneNumber}
         </div>
 
         <div className="profile-detail">
