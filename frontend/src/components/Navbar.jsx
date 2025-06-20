@@ -2,20 +2,7 @@ import { Link, Navigate } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 const Navbar = () => {
-  const { isloggedIn, user, toggleAuth } = useAuth();
-
-  // const handleLogout = () => {
-  //   logout();
-  // };
-
-  const handleAuth = () => {
-    if (isloggedIn) {
-      toggleAuth();
-      Navigate("/");
-    } else {
-      Navigate("/login");
-    }
-  };
+  const { isloggedIn, user, logout } = useAuth();
 
   return (
     <div
@@ -45,9 +32,16 @@ const Navbar = () => {
 
         <div className="nav-right">
           <span className="user-info">{user?.name || " "}</span>
-          <button className="logout-button" onClick={handleAuth}>
+          {/* <button className="logout-button" onClick={logout}>
             {isloggedIn ? `Logout` : `Login`}
-          </button>
+            <Link to="/login">Login</Link> */}
+          {/* </button> */}
+
+          {isloggedIn ? (
+            <button onClick={logout}> Logout </button>
+          ) : (
+            <Link to="/login"> Login </Link>
+          )}
         </div>
       </div>
     </div>
