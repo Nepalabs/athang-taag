@@ -1,0 +1,92 @@
+/* NAVBAR CONTAINER */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    /* increased height */
+    background: rgba(255, 255, 255, 0.8);
+    /* white with opacity */
+    backdrop-filter: blur(10px);
+    /* soft blur effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* MAIN LINKS */
+.navbar a {
+    text-decoration: none;
+    color: #1d3557;
+    /* dark blue text */
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #f05454;
+}
+
+/* NAV LINKS GROUP */
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+/* LOGOUT BUTTON */
+.nav-right button {
+    padding: 0.5rem 1.2rem;
+    background-color: #f05454;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-right button:hover {
+    background-color: #ff6b6b;
+    transform: scale(1.05);
+}
+
+/* LOGIN LINK (styled like a button) */
+.nav-right a {
+    background-color: transparent;
+    border: 2px solid #f05454;
+    padding: 0.45rem 1.1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    color: #f05454;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.nav-right a:hover {
+    background-color: #f05454;
+    color: #ffffff;
+}
+
+/* RESPONSIVE STYLES */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.2rem;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+        margin-top: 1rem;
+        width: 100%;
+    }
+
+    .nav-right {
+        margin-top: 1rem;
+    }
+}

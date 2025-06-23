@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { loginUser } from "../../api/api";
+import "./Login.css";
 
 const initialData = {
   email: "",
@@ -37,9 +38,9 @@ const Login = () => {
   };
 
   return (
-    <div className="register-container">
-      <form onSubmit={handleSubmit} className="register-form">
-        <h3 className="register-title"> Login </h3>
+    <div className="login-container">
+      <form onSubmit={handleSubmit} className="login-form">
+        <h3 className="login-title"> Login </h3>
 
         <label>Email</label>
         <input
@@ -59,11 +60,11 @@ const Login = () => {
           required
         />
 
-        {error && <p className="register-error">{error}</p>}
+        {error && <p className="login-error">{error}</p>}
 
         <button type="submit">LogIn</button>
-        <p className="register-link">
-          No accout to be found? <Link to="/register">Register</Link>
+        <p className="login-link">
+          No account to be found? <Link to="/register">Register</Link>
         </p>
       </form>
     </div>

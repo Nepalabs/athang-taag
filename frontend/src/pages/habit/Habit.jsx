@@ -6,6 +6,8 @@ import {
   deleteHabit,
 } from "../../api/api";
 import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import "./Habit.css";
 
 const initialData = {
   title: "",
@@ -299,6 +301,7 @@ const Habit = () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };
