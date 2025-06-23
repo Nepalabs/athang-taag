@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "../css/Navbar.css";
 
 const Navbar = () => {
   const { isloggedIn, logout } = useAuth();
@@ -11,27 +12,10 @@ const Navbar = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "1rem 2rem",
-        zIndex: 1000,
-      }}
-    >
-      <Link
-        style={{
-          fontWeight: "bold",
-          fontSize: "1.2rem",
-          textDecoration: "none",
-        }}
-        to="/"
-      >
-        Home
-      </Link>
+    <div className="navbar">
+      <Link to="/">Home</Link>
 
-      <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+      <div className="nav-links">
         <Link to="/habits">Habits</Link>
         <Link to="/about">About</Link>
         {isloggedIn && <Link to="/profile"> Profile </Link>}

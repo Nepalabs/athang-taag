@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AppRoutes from "./routes/AppRoutes";
-import "./App.css";
 
 const App = () => {
   const [message, setMessage] = useState("");

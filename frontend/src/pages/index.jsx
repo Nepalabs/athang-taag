@@ -1,9 +1,51 @@
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { useEffect, useState } from "react";
+import "../css/Home.css";
+
+const imageList = [
+  {
+    url: "https://meditationinsydney.com/wp-content/uploads/2024/04/Benefits-of-meditation-God-light.jpg",
+  },
+  {
+    url: "https://goqii.com/blog/wp-content/uploads/6-Health-Benefits-of-Playing-Sports-1024x683.jpg",
+  },
+  {
+    url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFgCFto2O9UmwGA9kTzPUJpIuGad5f5gCoUw&s",
+  },
+  {
+    url: "https://cdn-magazine.nutrabay.com/wp-content/uploads/2023/02/strong-bodybuilder-doing-heavy-weight-exercise-back-machine-1.jpg",
+  },
+];
 
 const Home = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === imageList.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="home-container">
+    <div>
       <Navbar />
+
+      <div className="home-container">
+        <div className="content">
+          <div className="image-gallery">
+            <img
+              className="habit-image sliding-image"
+              src={imageList[currentImageIndex].url}
+              alt={imageList[currentImageIndex].alt}
+            />
+          </div>
+        </div>
+      </div>
       <div className="content">
         <h1 className="main-title">Welcome to the Habit Tracker</h1>
 
@@ -54,12 +96,6 @@ const Home = () => {
         </section>
 
         <div className="image-gallery">
-          <img
-            className="habit-image"
-            src="https://th.bing.com/th/id/OIP.lKJEilHoYcMJVNLfev0JeQHaHa?rs=1&pid=ImgDetMain"
-            alt="Meditation Habit"
-          />
-
           <section className="section">
             <h2 className="section-title">
               Habit Tips: Your Roadmap to Success
@@ -83,12 +119,6 @@ const Home = () => {
               </li>
             </ul>
           </section>
-
-          <img
-            className="habit-image"
-            src="https://myprofittutor.com/wp-content/uploads/2023/06/make-journaling-a-habit.jpg"
-            alt="Journaling Habit"
-          />
         </div>
 
         <div className="conclusion">
@@ -100,13 +130,10 @@ const Home = () => {
           <p>
             Ready to take the first step? Let’s build better habits — together.
           </p>
-          <img
-            className="habit-image"
-            src="https://hammersgym.com.au/wp-content/uploads/2022/06/weightlifting-barbell-physical-fitness-strength-training-weight-training-deadlift-1561723-pxhere.com_.jpg"
-            alt="Exercise Habit"
-          />
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

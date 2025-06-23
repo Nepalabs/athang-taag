@@ -20,6 +20,11 @@ const deleteHabit = (id) => {
 const updateHabit = (id, data) => {
   return axios.put(`/habits/${id}`, data);
 };
+
+const getUser = () => {
+  return axios.get("/auth/loggedin-user");
+};
+
 export {
   registerUser,
   loginUser,
@@ -27,4 +32,5 @@ export {
   createHabit,
   deleteHabit,
   updateHabit,
+  getUser,
 };

@@ -1,12 +1,13 @@
 import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 import Team from "./Team";
 
 const About = () => {
   return (
     <div>
       <Navbar />
-      <h1>Welcome to Habit Tracker</h1>
       <Team />
+      <Footer />
     </div>
   );
 };
