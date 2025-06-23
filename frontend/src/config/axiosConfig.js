@@ -1,7 +1,8 @@
 import _axios from "axios";
 
+console.log(import.meta.env.VITE_URL);
 const axios = _axios.create({
-  baseURL: import.meta.env.viteURL,
+  baseURL: import.meta.env.VITE_URL,
   headers: { "Content-Type": "application/json" },
 });
 
