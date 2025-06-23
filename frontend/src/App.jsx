@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import AppRoutes from "./routes/AppRoutes";
+import axios from "./config/axiosConfig";
 
 const App = () => {
   const [message, setMessage] = useState("");
@@ -8,7 +8,7 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000", {
+        const response = await axios.get("/", {
           withCredentials: true,
         });
         setMessage(response.data.message);
